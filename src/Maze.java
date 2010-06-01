@@ -5,13 +5,26 @@ public class Maze {
 
 	private final Cell[][] cells;
 	
-	private Point playerPosition = new Point(1, 1);
+	private Point playerPosition;
 	
 	public Maze(int rows, int columns) {
 		 cells = new Cell[rows][columns];
 
 		 initAllCellsAsNeutral(rows, columns);
 		 initWalls(rows, columns);
+		 setPlayerPosition(1, 1);
+	}
+	
+	private void setPlayerPosition(Point point) {
+		setPlayerPosition(point.x, point.y);
+	}	
+
+	private void setPlayerPosition(int x, int y) {
+		if (playerPosition != null) {
+			getCell(playerPosition).setHasPlayer(false);
+		}
+		playerPosition = new Point(x, y);		
+		getCell(playerPosition).setHasPlayer(true);
 	}
 
 	private void initWalls(int rows, int columns) {
@@ -53,13 +66,13 @@ public class Maze {
 		moveTo(new Point(playerPosition.x + 1, playerPosition.y), Direction.WEST);		
 	}
 	
-	private void moveTo(Point destinationPoint, Direction direction) {
+	private void moveTo(Point destinationPoint, Direction fromDirection) {
 		Cell destinationCell = getCell(destinationPoint);
-		if (!destinationCell.allows(direction)) return;
-		Unit member = getCell(playerPosition).getMember();
+		if (!destinationCell.allows(fromDirection)) return;
+		Unit member = getCell(playerPosition).getFollowers(fromDirection);
 		destinationCell.add(member);
-		
-		playerPosition = destinationPoint;
+		getCell(playerPosition).remove(member);
+		setPlayerPosition(destinationPoint);
 	}
 
 	public void add(Unit unit, Point point) {
@@ -72,6 +85,14 @@ public class Maze {
 
 	public Unit getMember(Point point) {
 		return getCell(point).getMember();
+	}
+
+	public Unit getMember(int x, int y) {
+		return getMember(new Point(x, y));
+	}
+
+	public Cell getCell(int row, int column) {
+		return cells[row][column];
 	}
 
 }
