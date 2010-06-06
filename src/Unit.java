@@ -27,7 +27,7 @@ public class Unit {
 		return newMember.getSize() > getSize();
 	}
 
-	private int getSize() {
+	public int getSize() {
 		return size;
 	}
 
@@ -71,5 +71,9 @@ public class Unit {
 		} else if (containedUnit != null) {
 			containedUnit.remove(leavingMember);
 		}
+	}
+
+	public Direction facing() {
+		return facing;
 	}
 }

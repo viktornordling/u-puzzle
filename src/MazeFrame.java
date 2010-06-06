@@ -23,7 +23,9 @@ public class MazeFrame extends JFrame implements KeyListener {
 		int rows = 4;
 		int columns = 5;		
 		maze = new Maze(rows, columns);
-		maze.add(new Unit(Direction.NORTH, 0), new Point(1, 2));
+		//maze.add(new Unit(Direction.NORTH, 0), new Point(1, 2));
+		maze.add(new Unit(Direction.WEST, 0), new Point(3, 1));
+		maze.add(new Unit(Direction.WEST, 1), new Point(2, 2));
 		setLayout(new GridLayout(rows, columns));
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {

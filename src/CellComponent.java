@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
 
@@ -39,9 +40,41 @@ public class CellComponent extends JComponent {
 	}
 
 	private void paintMembers(Unit member, Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 5, getHeight());
-		g.fillRect(getWidth() - 5, 0, 5, getHeight());
-		g.fillRect(0, getHeight() - 5, getWidth(), 5);
+		Graphics2D g2d = (Graphics2D) g.create();
+		double step = Math.PI / 2;
+		int steps = getSteps(member.facing());
+
+		if (member.getSize() == 1) {
+			g2d.scale(0.7, 0.7);
+			g2d.translate(7, 10);
+		}		
+		
+		if (steps > 0) {
+			g2d.translate(getWidth() / 2, getHeight() / 2);
+			g2d.rotate(step * steps);
+			g2d.translate(-(getWidth() / 2), -(getHeight() / 2));
+		}
+		
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(1, 1, 4, getHeight() - 2);
+		g2d.fillRect(getWidth() - 5, 1, 4, getHeight() - 2);
+		g2d.fillRect(1, getHeight() - 5, getWidth() - 2, 4);
+		
+		g2d.dispose();
+		if (member.getContainedUnit() != null) {
+			paintMembers(member.getContainedUnit(), g);
+		}
+	}
+
+	private int getSteps(Direction facing) {
+		switch (facing) {
+		case EAST:
+			return 1;
+		case SOUTH:
+			return 2;
+		case WEST:
+			return 3;
+		}
+		return 0;
 	}
 }

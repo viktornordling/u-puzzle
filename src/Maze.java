@@ -67,11 +67,13 @@ public class Maze {
 	}
 	
 	private void moveTo(Point destinationPoint, Direction fromDirection) {
-		Cell destinationCell = getCell(destinationPoint);
-		if (!destinationCell.allows(fromDirection)) return;
-		Unit member = getCell(playerPosition).getFollowers(fromDirection);
-		destinationCell.add(member);
-		getCell(playerPosition).remove(member);
+		Cell destinationCell = getCell(destinationPoint);		
+		Unit followers = getCell(playerPosition).getFollowers(fromDirection);
+		
+		if (!destinationCell.allows(fromDirection, followers)) return;
+		
+		destinationCell.add(followers);
+		getCell(playerPosition).remove(followers);
 		setPlayerPosition(destinationPoint);
 	}
 
